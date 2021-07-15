@@ -17,7 +17,6 @@ class CreatePartyUsersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('party_id')->references('id')->on('parties');
-            $table->id();
             $table->timestamps();
         });
     }
