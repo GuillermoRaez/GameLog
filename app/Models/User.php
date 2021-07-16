@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
     ];
@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // A user can have an infinite number of messages
+    public function message (){
+        return $this -> hasMany(Message::class);
+    }
+
+    // A user can have an infinite number of parties
+    public function party_user (){
+        return $this -> hasMany(Party_User::class);
+    }
 }
