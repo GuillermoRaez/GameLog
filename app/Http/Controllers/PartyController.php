@@ -59,7 +59,7 @@ class PartyController extends Controller
 
     public function update(Request $request, $id)
     {
-        $post = auth()->user()->posts()->find($id);
+        $post = auth()->user()->parties()->find($id);
 
         if (!$post) {
             return response()->json([
