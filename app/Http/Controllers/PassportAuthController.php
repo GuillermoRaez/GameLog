@@ -6,6 +6,10 @@ use App\Models\User;
 
 class PassportAuthController extends Controller
 {
+    /**
+     * This function enables people to register themselves as users of the platform.
+     */
+
     public function register(Request $request)
     {
         $this->validate($request, [
@@ -24,6 +28,10 @@ class PassportAuthController extends Controller
 
         return response()->json(['token' => $token], 200);
     }
+
+    /**
+     * Once the user has been created, they have to login in order to use the platform.
+     */
 
     public function login(Request $request)
     {
