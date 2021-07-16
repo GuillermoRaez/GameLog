@@ -15,8 +15,8 @@ class CreatePartiesTable extends Migration
     {
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("games_id")->references('id')->on('games');
             $table->string("name");
+            $table->foreignId("games_id")->references('id')->on('games');
             $table->timestamps();
         });
     }

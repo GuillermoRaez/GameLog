@@ -7,5 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Party extends Model
 {
-    use HasFactory;
+    
+        // use HasFactory;
+
+        protected $fillable = [
+            'name',
+            'game_id'
+        ];
+
 }
+
