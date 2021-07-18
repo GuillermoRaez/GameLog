@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Party extends Model
 {
-    
-    use HasFactory;
+
+    // use HasFactory;
 
      protected $fillable = [
          'name',
@@ -17,7 +17,7 @@ class Party extends Model
     
 
     //A party can be in many user_parties (1:n).
-    public function Party_User (){
+    public function partyuser (){
         return $this -> HasMany(PartyUser::class);
     }
 

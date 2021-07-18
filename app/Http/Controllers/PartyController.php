@@ -43,7 +43,7 @@ class PartyController extends Controller
 
         $party = new Party();
         $party->name = $request->name;
-        $party->game_id = $request->game;
+        $party->game_id = $request->game_id;
 
         if (auth()->user()->parties()->save($party))
         return response()->json([
