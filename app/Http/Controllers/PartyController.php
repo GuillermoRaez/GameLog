@@ -59,16 +59,16 @@ class PartyController extends Controller
 
     public function update(Request $request, $id)
     {
-        $post = auth()->user()->parties()->find($id);
+        $party = auth()->user()->parties()->find($id);
 
-        if (!$post) {
+        if (!$party) {
             return response()->json([
                 'success' => false,
-                'message' => 'Post not found'
+                'message' => 'Party not found'
             ], 400);
         }
 
-        $updated = $post->fill($request->all())->save();
+        $updated = $party->fill($request->all())->save();
 
         if ($updated)
         return response()->json([
@@ -78,7 +78,7 @@ class PartyController extends Controller
         else
         return response()->json([
             'success' => false,
-            'message' => 'Post can not be updated'
+            'message' => 'Party can not be updated'
         ], 500);
     }
 
