@@ -40,10 +40,8 @@ class PartyUserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        // ruta crear agregar un usuario a una party
-        // Crear una party POST https://gamechat-laravel-mlf.herokuapp.com/api/partyusers
-        // Postman: necesita "token" y "party_id" por body
-    public function store(Request $request)
+    //Endpoint for user to join a party (POST)
+    public function join(Request $request)
     {
         $user = auth()->user();
 
@@ -51,10 +49,10 @@ class PartyUserController extends Controller
             'party_id' => 'required',
         ]);
 
-            // chequea si ya esta en la party
-        $checkUserInParty = PartyUser::where('party_id', '=', $request->party_id)->where('user_id', '=', $user->id)->get();
+        $userparty = PartyUser::where('party_id', '=', $request->party_id)->where('user_id', '=', $user->id)->get();
 
-        if($checkUserInParty->isEmpty()){
+        if($userparty->isEmpty()){
+
             $partyuser = PartyUser::create([
                 'user_id' => $user->id,
                 'party_id' => $request->party_id,
@@ -71,13 +69,13 @@ class PartyUserController extends Controller
             } else {
                 return response() ->json([
                     'success' => false,
-                    'message' => 'No se pudo agregar el usuario a la party',
+                    'message' => 'Unable to add the user to the party',
                 ], 500);
             }
         } else {
             return response()->json([
                 'success' => true,
-                'message' => "Ya estas en esa party."
+                'message' => "You are already in this party."
             ], 200); 
         }
     }
@@ -90,10 +88,8 @@ class PartyUserController extends Controller
      */
 
 
-        // ruta busca las partys de un usuario
-        // POST https://gamechat-laravel-mlf.herokuapp.com/api/partyusers/showByUser
-        // Postman: necestia "token", "user_id" por body 
-    public function showByUser()
+        //Shows all the parties from a user.
+    public function partiesuser()
     {
         $user = auth()->user();
 
@@ -110,16 +106,14 @@ class PartyUserController extends Controller
 
             return response() ->json([
                 'success' => false,
-                'message' => 'No tienes permiso para realizar esta acción.',
+                'message' => 'You are unable to perform this action since you are not the Admin.',
             ], 400);
 
         }
     }
 
-        // ruta busca las partys de un usuario
-        // POST https://gamechat-laravel-mlf.herokuapp.com/api/partyusers/showByParty
-        // Postman: necestia "token", "party_id" por body 
-    public function showByParty(Request $request)
+        //Shows all the parties from a user. 
+    public function usersparty(Request $request)
     {
         $user = auth()->user();
 
@@ -137,64 +131,35 @@ class PartyUserController extends Controller
 
             return response() ->json([
                 'success' => false,
-                'message' => 'No tienes permiso de administrador para realizar esta acción.',
+                'message' => 'You are unable to perform this action since you are not the Admin.',
             ], 400);
 
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PartyUser  $partyUser
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PartyUser $partyUser)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PartyUser  $partyUser
-     * @return \Illuminate\Http\Response
-     */
-
-        // ruta para abandonar una party
-        // POST https://gamechat-laravel-mlf.herokuapp.com/api/partyusers
-        // Postman: necestia "token", "party_id" por url
+        //Endpoint for user to leave a party (DELETE).
     public function destroy($party_id)
     {
         $user = auth()->user();
         
-        // chequea si ya esta en la party
-        $checkUserInParty = PartyUser::where('party_id', '=', $party_id)->where('user_id', '=', $user->id)->get();
+        $userparty = PartyUser::where('party_id', '=', $party_id)->where('user_id', '=', $user->id)->get();
 
 
-        if($checkUserInParty->isEmpty()){
+        if($userparty->isEmpty()){
+
             return response()->json([
                 'success' => false,
-                'message' => "No estás en esa party"
+                'message' => "You are not in this party"
             ], 400); 
         }else {
-            try{
-                $resultado = PartyUser::selectRaw('id')
+                $userparty = PartyUser::selectRaw('id')
                 ->where('party_id', '=', $party_id)
                 ->where('user_id', '=', $user->id)->delete();
 
                 return response()->json([
                     'success' => true,
-                    'messate' => "Has salido de la party"
+                    'messate' => "You have exited this party"
                 ], 200); 
-
-            }catch(QueryException $err){
-                return response()->json([
-                    'success' => false,
-                    'data' => $err
-                ], 400); 
-            }
         }
     }
 }
