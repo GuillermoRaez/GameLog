@@ -42,6 +42,7 @@ Route::middleware('auth:api')->group(function() {
 
     Route::resource('games', GameController::class);
 
-    Route::resource('party_user', PartyUserController::class);
+    Route::resource('partyusers', PartyUserController::class);
+    Route::post('partyusers/join', [PartyUserController::class, 'join']);
 
 });
