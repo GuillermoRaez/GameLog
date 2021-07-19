@@ -50,6 +50,6 @@ class User extends Authenticatable
 
     // A user can have an infinite number of parties
     public function party_user (){
-        return $this -> hasMany(Party_User::class);
+        return $this -> hasMany(PartyUser::class);
     }
 }
