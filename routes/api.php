@@ -32,9 +32,13 @@ Route::middleware('auth:api')->group(function() {
     //In this case the user if he is loged in, can use any method in postman.
     Route::resource('users', UserController::class);
 
+    //PARTIES
+    Route::post('parties/partygameid', [PartyController::class,'partygameid']);
+
+
     Route::resource('messages', MessageController::class);
 
-    Route::resource('parties', PartyController::class);
+    // Route::resource('parties', PartyController::class);
 
     Route::resource('games', GameController::class);
 

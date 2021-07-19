@@ -7,15 +7,26 @@ use Illuminate\Http\Request;
 
 class PartyController extends Controller
 {
-    public function index()
-    {
-        $parties = auth()->user()->parties;
+    public function partygameid(Request $request)
+     {
 
-        return response()->json([
-            'success' => true,
-            'data' => $parties
-        ]);
+        $user = auth()->user();
+
+        if ($user) {
+
+         $partiesgameid = Party::where('game_id', '=', $request->game_id)->get();
+         if (!$partiesgameid) {
+             return response() ->json([
+                 'success' => false,
+                 'data' => 'No party was found with this game.'], 400);
+         } else {
+             return response() ->json([
+                 'success' => true,
+                 'data' => $partiesgameid,
+             ], 200);
+         }
     }
+}
 
     public function show($id)
     {
