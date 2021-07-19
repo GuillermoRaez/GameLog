@@ -29,20 +29,22 @@ Route::post('login', [PassportAuthController::class, 'login']);
 Route::middleware('auth:api')->group(function() {
 
     //RESOURCE method enables to use the complete CRUD (7 methods).
-    //In this case the user if he is loged in, can use any method in postman.
+    
+    //USERS
     Route::resource('users', UserController::class);
+    Route::post('users/logout', [UserController::class,'logout']); 
 
     //PARTIES
     Route::post('parties/partygameid', [PartyController::class,'partygameid']);
 
-
+    //MESSAGES
     Route::resource('messages', MessageController::class);
     Route::post('messages/allmessages', [MessageController::class, 'allmessages']);
 
-    // Route::resource('parties', PartyController::class);
-
+    //GAMES
     Route::resource('games', GameController::class);
 
+    //PARTYUSERS
     Route::resource('partyusers', PartyUserController::class);
     Route::post('partyusers/join', [PartyUserController::class, 'join']);
 
