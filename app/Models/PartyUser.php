@@ -5,24 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class PartyUser extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'text',
-        'party_id',
-        'user_id'
+        'user_id',
+        'party_id'
     ];
 
-    // A message belongs to only one User
+    // A PartyUser is owned by only one User (n:1).
     public function user (){
         return $this -> belongsTo(User::class);
     }
 
-    // A message belongs to only one Party
+    // A PartyUser is owned by only one Party (n:1).
     public function party (){
         return $this -> belongsTo(Party::class);
     }
-
 }
