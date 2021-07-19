@@ -38,10 +38,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
     /**
      * Display the specified resource.
@@ -50,17 +51,15 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        // El user puede buscar sus datos por id
-        // GET https://gamechat-laravel-mlf.herokuapp.com/api/users/{$id}
-        // se pasa la "id" por url
     public function show($id)
     {
         //
             $user = auth()->user()->find($id);
+
             if(!$user){
                 return response() ->json([
                     'success' => false,
-                    'message' => 'User no encontrado',
+                    'message' => 'User not found',
                 ], 400);
             }
             return response() ->json([
@@ -78,10 +77,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        // funcion actualizar usuario 
-        // PUT https://gamechat-laravel-mlf.herokuapp.com/api/users/{$id}
-        // pasar "token" del usuario que se va a eliminar por postman  
-        // pasar por body todos los campos que se pueden actualizar (cambien o no) - "steamUsername", "username", "email"
     public function update(Request $request, $id)
     {
 
@@ -90,22 +85,23 @@ class UserController extends Controller
             if(!$user){
                 return response() ->json([
                     'success' => false,
-                    'message' => 'Usario no encontrado',
+                    'message' => 'User not found',
                 ], 400);
             }    
             $updated = $user->update([
+                'name' => $request->input('name'),
                 'username' => $request->input('username'),
-                'steamUsername' => $request->input('steamUsername'),
                 'email' => $request->input('email'),
             ]);
             if($updated){
                 return response() ->json([
                     'success' => true,
+                    'message' => 'The user personal data has been updated!'
                 ]);
             } else {
                 return response() ->json([
                     'success' => false,
-                    'message' => 'El usuario no se puede actualizar',
+                    'message' => 'The user can not be updated',
                 ], 500);
             }
         }
@@ -118,12 +114,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-        // funcion eliminar usuario 
-        // DELETE https://gamechat-laravel-mlf.herokuapp.com/api/users/{$id}
-        // pasar "token" del usuario que se va a eliminar por postman 
     public function destroy($id)
     {
-        //
+        
         $user = auth()->user()->find($id);
 
         if($user->delete()){
@@ -133,19 +126,17 @@ class UserController extends Controller
         } else {
             return response() ->json([
                 'success' => false,
-                'message' => 'El usuario no se puede eliminar',
+                'message' => 'The user can not be deleted',
             ], 500);
         }
     }
 
-        // funcion logout de usuario 
-        // POST https://gamechat-laravel-mlf.herokuapp.com/api/users/logout
-        // pasar "token" por postman
+    //Logout function to be tested
     public function logout(Request $request)
     {
         $token = $request->user()->token();
         $token ->revoke();
 
-        return response()->json('Hasta pronto!');
+        return response()->json('See you later, aligator!');
     }
 }
