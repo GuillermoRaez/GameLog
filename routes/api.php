@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group(function() {
 
     //GAMES
     Route::resource('games', GameController::class);
+    Route::get('games', [GameController::class, 'show']);
 
     //PARTYUSERS
     Route::resource('partyusers', PartyUserController::class);
