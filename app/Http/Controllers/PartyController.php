@@ -41,20 +41,21 @@ class PartyController extends Controller
             'game_id' => 'required'
         ]);
 
-        $party = new Party();
-        $party->name = $request->name;
-        $party->game_id = $request->game_id;
-
-        if (auth()->user()->parties()->save($party))
-        return response()->json([
-            'success' => true,
-            'data' => $party->toArray()
+        $party = Party::create([
+            'name' => $request->name,
+            'game_id' => $request->game_id,
         ]);
-        else 
-        return response()->json([
-            'success' => false,
-            'message' => 'Party not added'
-        ], 500);
+
+        if (!$party) {
+            return response() ->json([
+                'success' => false,
+                'data' => 'Unable to create Party.'], 400);
+        } else {
+            return response() ->json([
+                'success' => true,
+                'data' => $party,
+            ], 200);
+        }
     }
 
     public function update(Request $request, $id)

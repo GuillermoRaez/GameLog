@@ -3,7 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PassportAuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PartyController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\PartyUserController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +29,15 @@ Route::post('login', [PassportAuthController::class, 'login']);
 Route::middleware('auth:api')->group(function() {
 
     //RESOURCE method enables to use the complete CRUD (7 methods).
-    //In this case the user can use any method in postman.
-    Route::resource('user', UserController::class);
+    //In this case the user if he is loged in, can use any method in postman.
+    Route::resource('users', UserController::class);
+
+    Route::resource('messages', MessageController::class);
 
     Route::resource('parties', PartyController::class);
+
+    Route::resource('games', GameController::class);
+
+    Route::resource('party_user', PartyUserController::class);
 
 });
