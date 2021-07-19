@@ -13,7 +13,6 @@ class GameController extends Controller
 
     public function store(Request $request)
     {
-        //
 
         $user = auth()->user();
 
@@ -73,7 +72,44 @@ class GameController extends Controller
     }
     }
 
-    public function update() {
+    public function update(Request $request, $id)
+    {
+
+        $user = auth()->user();
+
+        if($user->id === 1){
+
+            $resultado = Game::where('id', '=', $id);
+
+            if (!$resultado) {
+                return response() ->json([
+                    'success' => false,
+                    'data' => 'No Game was found.'
+                ], 400);
+            } 
+
+            $updated = $resultado->update([
+                'title' => $request->input('title'),
+                'description' => $request->input('description')
+            ]);
+
+            if($updated){
+                return response() ->json([
+                    'success' => true,
+                    'message' => 'The game has been successfully modified'
+                ]);
+            } else {
+                return response() ->json([
+                    'success' => false,
+                    'message' => 'The Game can not be updated',
+                ], 500);
+            }
+        } else {
+            return response() ->json([
+                'success' => false,
+                'message' => 'You need to be an admin in order to perform that action.',
+            ], 400);
+        }
 
     }
 

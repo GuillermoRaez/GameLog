@@ -9,6 +9,7 @@ This project was made by [Guillermo Raez](https://github.com/GuillermoRaez), stu
 # About 🔧
 
 The project itself consisted of creating a backend for gamers for them to be able to register and login, and create a unlimited number of parties for videogames they like to play with friends and strangers online.
+The deployment could be made locally as it has been done in this project but also one of the tasks was to deploy with heroku.
 
 The framework that we used to create this API is Laravel and the programming language is PHP.
 
@@ -42,17 +43,19 @@ An admin was generated for the following points:
 - Show all the Parties.
 - Show all the Users.
 
-- Create, Update and Delete the following:
+Create, Update and Delete the following:
 
 - Parties,
 - Games.
 
 ## Tools 
 
-- PHP,
-- LARAVEL,
-- DOCKER,
-- MARIADB.
+<img src="resources/img/php.png" width="50"> <img src="resources/img/laravel.png" width="50"> <img src="resources/img/dbeaver.jpeg" width="50"> <img src="resources/img/mysql.png" width="50"> <img src="resources/img/docker.png" width="50">
+
+## Issues
+
+Heroku deployment was not made in this project due to issues with the project.
+Next step, will be to try and reproduce the same project in heroku and make it work as if it is in Local.
 
 # Thanks
 
