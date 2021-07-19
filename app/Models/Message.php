@@ -10,7 +10,9 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
-        'text'
+        'text',
+        'party_id',
+        'user_id'
     ];
 
     // A message belongs to only one User

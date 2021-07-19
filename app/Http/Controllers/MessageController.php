@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Message;
+use App\Models\PartyUser;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -35,28 +36,51 @@ class MessageController extends Controller
 
     public function store(Request $request)
     {
+        $user = auth()->user();
+
         $this->validate($request, [
-            'text' => 'required'
+            'text' => 'required',
+            'party_id' => 'required',
         ]);
 
-        $message = new Message();
-        $message->text = $request->text;
+        $userinparty = PartyUser::where('party_id','=', $request->party_id)->where('user_id', '=', $user->id)->get();
 
-        if (auth()->user()->messages()->save($message))
-        return response()->json([
-            'success' => true,
-            'data' => $message->toArray()
-        ]);
-        else 
-        return response()->json([
-            'success' => false,
-            'message' => 'Message not added'
-        ], 500);
+        if ($userinparty->isEmpty()) {
+
+            return response() ->json([
+                'success' => false,
+                'message' => 'The user is not in this party',
+            ], 400);
+
+        } else {
+            $message = Message::create ([
+                    'text' => $request -> text,
+                    'user_id' => $user->id,
+                    'party_id' => $request -> party_id,
+                ]);
+
+            if ($message) {
+            
+            return response() ->json([
+                'success' => true,
+                'message' => "Message send."
+            ], 200);
+
+            } else { 
+                return response()->json([
+                    'success' => false,
+                    'message' => "The message could not be delivered."
+                ], 400); 
+
+            }
+        }     
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $message_id)
     {
-        $message = auth()->user()->messages()->find($id);
+
+        $user = auth()->user();
+        $message = Message::all()->find($message_id);
 
         if (!$message) {
             return response()->json([
@@ -65,19 +89,24 @@ class MessageController extends Controller
             ], 400);
         }
 
-        $updated = $message->fill($request->all())->save();
+        $updated = $message['user_id'] != $user['id'];
 
-        if ($updated)
-        return response()->json([
-            'success' => true
-        ]);
-
-        else
+        if ($updated){
         return response()->json([
             'success' => false,
-            'message' => 'Message can not be updated'
-        ], 500);
+            'message' => "The message does not belong to you, hence it can not be updated."
+        ], 400);
+
+        }else{
+            $message->update([
+                'text' => $request->text
+            ]);
+        return response()->json([
+            'success' => true,
+            'message' => 'The message has been properly modified.'
+        ], 200);
     }
+}
 
     public function destroy($id)
     {
