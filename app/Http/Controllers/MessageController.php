@@ -17,22 +17,44 @@ class MessageController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function allmessages(Request $request)
     {
-        $message = auth()->user()->messages()->find($id);
+        $user = auth()->user();
+        
+        $userparty = PartyUser::where('party_id','=', $request->party_id)->where('user_id', '=', $user->id)->get();
 
-        if (!$message) {
-            return response()->json([
+        if ($userparty->isEmpty()) {
+
+            return response() ->json([
                 'success' => false,
-                'message' => 'Message not found'
+                'message' => 'The user is not in this party.',
             ], 400);
-        }
 
-        return response()->json([
-            'success' => true,
-            'data' => $message->toArray()
-        ], 200);
+        } else {
+
+            $message = Message::where('party_id', '=', $request->party_id)->get();
+
+            if(!$message){
+                return response() ->json([
+                    'success' => false,
+                    'message' => 'No messages has been found.',
+                ], 400);
+
+            } elseif ($message->isEmpty()) {
+                return response() ->json([
+                    'success' => false,
+                    'message' => 'There are no messages.',
+                    ], 400);
+
+            } else {      
+                return response() ->json([
+                    'success' => true,
+                    'data' => $message,
+                ], 200);
+            } 
+        }
     }
+
 
     public function store(Request $request)
     {
@@ -108,26 +130,35 @@ class MessageController extends Controller
     }
 }
 
-    public function destroy($id)
-    {
-        $message = auth()->user()->messages()->find($id);
+public function destroy(Request $request, $message_id)
+{
+    $user = auth()->user();
+   
+    if($user->id == 1 || $user->id == $request->user_id){
 
-        if (!$message) {
-            return response()->json([
+        $resultado = Message::where('id', '=', $message_id);
+        if (!$resultado) {
+            return response() ->json([
                 'success' => false,
-                'message' => 'Message not found'
+                'data' => 'No message was found with this id.'
             ], 400);
-        }
-
-        if ($message->delete()) {
-            return response()->json([
-                'success' => true
-            ]);
+        } 
+        if ($resultado -> delete()) {
+            return response() ->json([
+                'success' => true,
+                'message' => 'Message deleted.'
+            ], 200);
         } else {
-            return response()->json([
+            return response() ->json([
                 'success' => false,
-                'message' => 'Message can not be deleted'
+                'message' => 'The message could not be deleted'
             ], 500);
         }
+    } else {
+        return response() ->json([
+            'success' => false,
+            'message' => 'You do not have authorization to perform this action.',
+        ], 400);
     }
+}
 }

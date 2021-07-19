@@ -37,6 +37,7 @@ Route::middleware('auth:api')->group(function() {
 
 
     Route::resource('messages', MessageController::class);
+    Route::post('messages/allmessages', [MessageController::class, 'allmessages']);
 
     // Route::resource('parties', PartyController::class);
 
